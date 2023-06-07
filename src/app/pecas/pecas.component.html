@@ -1,0 +1,79 @@
+<div *ngIf="auth.user">
+  <div class="container-fluid m-2">
+    <router-outlet></router-outlet>
+  </div>
+  <h2>Listagem de peças de carro cadastradas</h2>
+  <hr />
+  <div>
+    <div>Digite a marca e modelo dos pneus:</div>
+    <div><input [(ngModel)]="formPneus" /></div>
+    <div>Digite o ano dos pneus:</div>
+    <div><input type="number" [(ngModel)]="formAnoPneus" /></div>
+    <br />
+    <button (click)="addItemPeca('Pneus', formPneus, formAnoPneus)">
+      Cadastrar Pneus
+    </button>
+    <hr />
+  </div>
+  <div>
+    <div>Digite a marca e modelo dos faróis:</div>
+    <div><input [(ngModel)]="formFarois" /></div>
+    <div>Digite o ano dos faróis:</div>
+    <div><input type="number" [(ngModel)]="formAnoFarois" /></div>
+    <br />
+    <button (click)="addItemPeca('Faróis', formFarois, formAnoFarois)">
+      Cadastrar Faróis
+    </button>
+    <hr />
+  </div>
+  <div>
+    <div>Digite a marca e modelo da bateria:</div>
+    <div><input [(ngModel)]="formBateria" /></div>
+    <div>Digite o ano da bateria:</div>
+    <div><input type="number" [(ngModel)]="formAnoBateria" /></div>
+    <br />
+    <button (click)="addItemPeca('Bateria', formBateria, formAnoBateria)">
+      Cadastrar Bateria
+    </button>
+    <hr />
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <h2>Itens cadastrados</h2>
+  <hr />
+  <table border="1">
+    <tr>
+      <th>Tipo</th>
+      <th>Modelo</th>
+      <th>Meses de uso</th>
+      <th>Status</th>
+      <th>Remover</th>
+    </tr>
+    <tr *ngFor="let item of list | async">
+      <td>{{ item.tipo }}</td>
+      <td>{{ item.modelo }}</td>
+      <td>{{ item.tempo }}</td>
+      <td>
+        <ng-container *ngIf="item.email"> Não é uma peça </ng-container>
+        <ng-container *ngIf="!item.email">
+          <ng-container *ngIf="item.tempo <= 0">
+            Essa peça não tem validade
+          </ng-container>
+          <ng-container *ngIf="item.tempo > 0 && item.tempo <= 6">
+            Não é necessário a troca
+          </ng-container>
+          <ng-container *ngIf="item.tempo > 6">
+            Precisa realizar a troca urgentemente
+          </ng-container>
+        </ng-container>
+      </td>
+
+      <td>
+        <button (click)="deleteItemPeca(item.key)">Deletar</button>
+      </td>
+    </tr>
+  </table>
+</div>
